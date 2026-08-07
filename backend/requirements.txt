@@ -1,0 +1,54 @@
+# AI BUILD 2026 - Cart Rescue Platform Backend Dependencies
+# Tested & compatible with Python 3.14.x
+# Upper bounds removed to allow pip to resolve latest wheels for Python 3.14
+
+# ─── Web Framework & ASGI Server ──────────────────────────────────────────────
+fastapi
+uvicorn[standard]
+websockets
+python-multipart
+
+# ─── Data Validation & Settings (Pydantic v2) ─────────────────────────────────
+pydantic>=2.6.4
+pydantic-settings>=2.2.1
+email-validator>=2.1.1
+
+# ─── Database & ORM (Async SQLAlchemy 2.0 + PostgreSQL + Alembic) ─────────────
+SQLAlchemy[asyncio]>=2.0.28
+asyncpg
+alembic
+psycopg2-binary
+
+# ─── Caching & Message Broker ─────────────────────────────────────────────────
+redis
+celery
+
+# ─── Machine Learning & Feature Engineering ───────────────────────────────────
+# NOTE: scikit-learn>=1.6.0 has Python 3.14 wheels; xgboost>=2.1.0 has Python 3.14 wheels
+xgboost>=2.1.0
+lightgbm>=4.5.0
+scikit-learn>=1.6.0
+numpy>=2.0.0
+pandas>=2.2.0
+
+# ─── Authentication & Security ────────────────────────────────────────────────
+PyJWT>=2.8.0
+passlib[bcrypt]>=1.7.4
+bcrypt>=4.1.2
+
+# ─── Telemetry, Structured Logging & Monitoring ───────────────────────────────
+structlog>=24.1.0
+opentelemetry-api>=1.23.0
+opentelemetry-sdk>=1.23.0
+opentelemetry-instrumentation-fastapi>=0.44b0
+
+# ─── External Notifications (Twilio, SendGrid) ────────────────────────────────
+sendgrid>=6.11.0
+twilio>=9.0.0
+
+# ─── Testing & Utilities ──────────────────────────────────────────────────────
+httpx
+pytest>=8.1.1
+pytest-asyncio>=0.23.5
+pytest-cov>=4.1.0
+aiosqlite>=0.20.0
