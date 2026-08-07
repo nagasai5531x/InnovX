@@ -64,7 +64,7 @@ Cart Rescue uses **Machine Learning** and **AI-based agents** to analyze custome
 ## 🔄 System Flow
 
 <p align="center">
-  <img src="https://chatgpt.com/backend-api/estuary/content?id=file_0000000066ec8208844eee6ecfe44650&ts=496150&p=fs&cid=1&sig=5ff4bf532c1c5768384307a9657ef4a2c8a387ff43c8d6647819e083c7b04e03&v=0" alt="Cart Rescue - System Flow" width="800"/>
+  <img src="Screenshot 2026-08-08 035323.png" alt="Cart Rescue - System Flow" width="800"/>
 </p>
 
 The system processes each customer session through a structured pipeline:
