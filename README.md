@@ -64,7 +64,7 @@ Cart Rescue uses **Machine Learning** and **AI-based agents** to analyze custome
 ## 🔄 System Flow
 
 <p align="center">
-  <img src="screenshots/system-flow.png" alt="Cart Rescue - System Flow" width="800"/>
+  <img src="https://chatgpt.com/backend-api/estuary/content?id=file_0000000066ec8208844eee6ecfe44650&ts=496150&p=fs&cid=1&sig=5ff4bf532c1c5768384307a9657ef4a2c8a387ff43c8d6647819e083c7b04e03&v=0" alt="Cart Rescue - System Flow" width="800"/>
 </p>
 
 The system processes each customer session through a structured pipeline:
@@ -147,17 +147,17 @@ Based on the customer's behavior and identified reason, the system selects the m
 
 ### 🔐 Login Page
 <p align="center">
-  <img src="screenshots/login.png" alt="Login Page" width="800"/>
+  <img src="C:/Users/kavya/OneDrive/Pictures/Screenshots/Screenshot 2026-08-08 033800.png" alt="Login Page" width="800"/>
 </p>
 
 ### 📊 Control Center (Dashboard)
 <p align="center">
-  <img src="screenshots/dashboard.png" alt="Dashboard - Control Center" width="800"/>
+  <img src="C:/Users/kavya/OneDrive/Pictures/Screenshots/Screenshot 2026-08-08 034100.png" alt="Dashboard - Control Center" width="800"/>
 </p>
 
 ### 📈 Analytics
 <p align="center">
-  <img src="screenshots/analytics.png" alt="Analytics Dashboard" width="800"/>
+  <img src="C:/Users/kavya/OneDrive/Pictures/Screenshots/Screenshot 2026-08-08 034150.png" alt="Analytics Dashboard" width="800"/>
 </p>
 
 ---
