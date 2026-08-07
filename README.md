@@ -147,17 +147,17 @@ Based on the customer's behavior and identified reason, the system selects the m
 
 ### 🔐 Login Page
 <p align="center">
-  <img src="C:/Users/kavya/OneDrive/Pictures/Screenshots/Screenshot 2026-08-08 033800.png" alt="Login Page" width="800"/>
+  <img src="Screenshot 2026-08-08 033800.png" alt="Login Page" width="800"/>
 </p>
 
 ### 📊 Control Center (Dashboard)
 <p align="center">
-  <img src="C:/Users/kavya/OneDrive/Pictures/Screenshots/Screenshot 2026-08-08 034100.png" alt="Dashboard - Control Center" width="800"/>
+  <img src="Screenshot 2026-08-08 034100.png" alt="Dashboard - Control Center" width="800"/>
 </p>
 
 ### 📈 Analytics
 <p align="center">
-  <img src="C:/Users/kavya/OneDrive/Pictures/Screenshots/Screenshot 2026-08-08 034150.png" alt="Analytics Dashboard" width="800"/>
+  <img src="Screenshot 2026-08-08 034150.png" alt="Analytics Dashboard" width="800"/>
 </p>
 
 ---
