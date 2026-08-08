@@ -11,7 +11,11 @@ import { AnalyticsView } from './components/dashboard/AnalyticsView';
 import { PolicyEngine } from './components/dashboard/PolicyEngine';
 import { AuditLedger } from './components/dashboard/AuditLedger';
 import { useDashboardStore } from './store/useDashboardStore';
-import { ShoppingCart, AlertTriangle, TrendingUp, DollarSign, Zap, ShieldCheck } from 'lucide-react';
+import { MerchantDashboard } from './pages/dashboards/MerchantDashboard';
+import { AnalystDashboard } from './pages/dashboards/AnalystDashboard';
+import { OperationsDashboard } from './pages/dashboards/OperationsDashboard';
+import { GrowthDashboard } from './pages/dashboards/GrowthDashboard';
+import { AdminDashboard } from './pages/dashboards/AdminDashboard';
 
 const pages: Record<string, { title: string; subtitle: string }> = {
   dashboard:  { title: 'Control Center',    subtitle: 'Real-time cart abandonment risk · AI-powered intervention · Profit optimization' },
@@ -23,13 +27,26 @@ const pages: Record<string, { title: string; subtitle: string }> = {
   settings:   { title: 'Settings',          subtitle: 'System configuration & integration management' },
 };
 
-const sparkSessions  = [820, 950, 1100, 890, 1250, 1420, 1100, 1380];
-const sparkMargin    = [3200, 3800, 4200, 3100, 4800, 6200, 4900, 5800];
-const sparkRisk      = [15, 18, 22, 16, 24, 29, 21, 25];
+function RoleDashboardView({ role }: { role: string }) {
+  switch (role) {
+    case 'Merchant':
+      return <MerchantDashboard />;
+    case 'Analyst':
+      return <AnalystDashboard />;
+    case 'Operations Manager':
+      return <OperationsDashboard />;
+    case 'Growth Manager':
+      return <GrowthDashboard />;
+    case 'Admin':
+      return <AdminDashboard />;
+    default:
+      return <MerchantDashboard />;
+  }
+}
 
 function Dashboard() {
   const [activePage, setActivePage] = useState('dashboard');
-  const { kpis, fetchRemoteData } = useDashboardStore();
+  const { fetchRemoteData } = useDashboardStore();
   const { user, logout } = useAuthStore();
   const page = pages[activePage] ?? pages.dashboard;
 
@@ -65,30 +82,7 @@ function Dashboard() {
           </div>
         );
       default:
-        return (
-          <div className="space-y-6 anim-fade">
-            <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5">
-              <StatCard title="Sessions Analyzed" value={kpis.total_sessions_analyzed.toLocaleString()} change="+12.4% vs yesterday" changeType="positive" icon={ShoppingCart} accentColor="indigo" subtitle="Real-time clickstream pipeline" sparkData={sparkSessions} />
-              <StatCard title="High Risk Sessions" value={kpis.high_risk_sessions.toLocaleString()} change="16.9% abandonment rate" changeType="negative" icon={AlertTriangle} accentColor="rose" subtitle="LightGBM score ≥ 0.60" sparkData={sparkRisk} />
-              <StatCard title="Recovered Cart Value" value={`$${(kpis.recovered_cart_value / 1000).toFixed(1)}K`} change="+28.4% conversion lift" changeType="positive" icon={TrendingUp} accentColor="emerald" subtitle="1,890 interventions executed" sparkData={[45, 62, 58, 74, 88, 110, 98, 124]} />
-              <StatCard title="Net Incremental Margin" value={`$${(kpis.net_incremental_margin / 1000).toFixed(1)}K`} change="38.7% net ROI" changeType="positive" icon={DollarSign} accentColor="emerald" subtitle="After costs & incentives" sparkData={sparkMargin} />
-            </div>
-
-            <div className="grid grid-cols-2 xl:grid-cols-4 gap-5">
-              <StatCard title="Avg Decision Latency" value={`${kpis.avg_decision_latency_ms}ms`} icon={Zap} accentColor="indigo" subtitle="p95 end-to-end" />
-              <StatCard title="Policy Pass Rate" value={`${(kpis.policy_pass_rate * 100).toFixed(1)}%`} icon={ShieldCheck} accentColor="emerald" subtitle="Margin compliance" />
-              <StatCard title="Critic Block Rate" value={`${(kpis.critic_rejection_rate * 100).toFixed(1)}%`} icon={ShieldCheck} accentColor="violet" subtitle="Cannibalization prevented" />
-              <StatCard title="Interventions Run" value={kpis.interventions_executed.toLocaleString()} icon={Zap} accentColor="amber" subtitle="Actions dispatched today" />
-            </div>
-
-            <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-              <div className="h-[580px]"><SessionFeed /></div>
-              <div className="h-[580px]"><AgentConsole /></div>
-            </div>
-
-            <AnalyticsView />
-          </div>
-        );
+        return <RoleDashboardView role={user?.role || 'Merchant'} />;
     }
   };
 

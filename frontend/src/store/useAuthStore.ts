@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
 import { api } from '../services/api';
+import { useRoleDashboardStore } from './useRoleDashboardStore';
 
 interface User {
   name: string;
@@ -40,6 +41,7 @@ export const useAuthStore = create<AuthStore>()(
 
       login: async (email, password) => {
         set({ isLoading: true, error: null });
+        useRoleDashboardStore.getState().clear();
         try {
           // Attempt real API call to FastAPI backend
           const res = await api.login(email, password);
@@ -82,6 +84,7 @@ export const useAuthStore = create<AuthStore>()(
 
       register: async (name, email, password, role) => {
         set({ isLoading: true, error: null });
+        useRoleDashboardStore.getState().clear();
         const initials = name.split(' ').map(n => n[0]).join('').toUpperCase().substring(0, 2);
         try {
           const res = await api.register(name, email, password, role);
@@ -106,7 +109,10 @@ export const useAuthStore = create<AuthStore>()(
         }
       },
 
-      logout: () => set({ user: null, token: null, isAuthenticated: false, error: null }),
+      logout: () => {
+        useRoleDashboardStore.getState().clear();
+        set({ user: null, token: null, isAuthenticated: false, error: null });
+      },
       clearError: () => set({ error: null }),
     }),
     {

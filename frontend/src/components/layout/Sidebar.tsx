@@ -21,8 +21,20 @@ const navItems = [
   { id: 'analytics',  icon: BarChart3,        label: 'Analytics',          badge: null },
 ];
 
+const ROLE_NAV_ALLOWED: Record<string, string[]> = {
+  'Merchant':           ['dashboard', 'sessions'],
+  'Analyst':            ['dashboard', 'analytics', 'agents', 'audit'],
+  'Operations Manager': ['dashboard', 'sessions', 'agents', 'policy'],
+  'Growth Manager':     ['dashboard', 'analytics'],
+  'Admin':              ['dashboard', 'sessions', 'agents', 'policy', 'audit', 'analytics'],
+};
+
 export const Sidebar: React.FC<SidebarProps> = ({ activePage, setActivePage, user, onLogout }) => {
   const [hovered, setHovered] = useState<string | null>(null);
+
+  const userRole = user?.role || 'Admin';
+  const allowedNavIds = ROLE_NAV_ALLOWED[userRole] || ROLE_NAV_ALLOWED['Admin'];
+  const filteredNavItems = navItems.filter(item => allowedNavIds.includes(item.id));
 
   return (
     <aside className="glass-sidebar w-64 min-h-screen flex flex-col fixed left-0 top-0 z-50">
@@ -57,7 +69,7 @@ export const Sidebar: React.FC<SidebarProps> = ({ activePage, setActivePage, use
 
       {/* Navigation */}
       <nav className="flex-1 px-3 py-2 space-y-0.5 overflow-y-auto">
-        {navItems.map((item) => {
+        {filteredNavItems.map((item) => {
           const isActive = activePage === item.id;
           const isHovered = hovered === item.id;
           return (

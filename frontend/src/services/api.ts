@@ -115,4 +115,25 @@ export const api = {
   getQualityMetrics: async () => {
     return request<any>('/analytics/quality-metrics');
   },
+
+  // Role-specific dashboards
+  getMerchantDashboard: async () => {
+    return request<any>('/dashboard/merchant');
+  },
+
+  getAnalystDashboard: async () => {
+    return request<any>('/dashboard/analyst');
+  },
+
+  getOperationsDashboard: async () => {
+    return request<any>('/dashboard/operations');
+  },
+
+  getGrowthDashboard: async () => {
+    return request<any>('/dashboard/growth');
+  },
+
+  getAdminDashboard: async () => {
+    return request<any>('/dashboard/admin');
+  },
 };

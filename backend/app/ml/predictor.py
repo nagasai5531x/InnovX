@@ -25,7 +25,9 @@ class CartRiskPredictor:
 
         # Feature importance attribution (SHAP surrogate score)
         top_features = {
-            "payment_failed_count": round(feature_dict.get("payment_failed_count", 0.0) * 0.35, 4),
+            "payment_failure_signal": round(feature_dict.get("payment_failed_count", 0.0) * 0.45, 4),
+            "payment_failed_count": round(feature_dict.get("payment_failed_count", 0.0) * 0.45, 4),
+            "high_shipping_fee": round(feature_dict.get("shipping_fee", 0.0) * 0.05, 4),
             "cursor_leave_count": round(feature_dict.get("cursor_leave_count", 0.0) * 0.25, 4),
             "tab_switch_count": round(feature_dict.get("tab_switch_count", 0.0) * 0.20, 4),
             "cart_total_amount": round(feature_dict.get("cart_total_amount", 0.0) * 0.001, 4),

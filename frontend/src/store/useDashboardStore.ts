@@ -232,6 +232,9 @@ interface DashboardStore {
   selectedDecision: DecisionResult | null;
   kpis: SystemKPIs;
   policy: PolicyGuardrails;
+  hourlyAnalytics: any[];
+  actionDistribution: any[];
+  qualityMetrics: any;
   isSimulating: boolean;
   filterRisk: 'ALL' | 'HIGH' | 'MEDIUM' | 'LOW';
   searchQuery: string;
@@ -250,14 +253,14 @@ export const useDashboardStore = create<DashboardStore>((set, get) => ({
   decisions: INITIAL_DECISIONS,
   selectedDecision: INITIAL_DECISIONS[0],
   kpis: {
-    total_sessions_analyzed: 14250,
-    high_risk_sessions: 2410,
-    interventions_executed: 1890,
-    recovered_cart_value: 124500.00,
-    net_incremental_margin: 48200.00,
+    total_sessions_analyzed: 25,
+    high_risk_sessions: 16,
+    interventions_executed: 17,
+    recovered_cart_value: 1845.00,
+    net_incremental_margin: 785.40,
     avg_decision_latency_ms: 18.4,
-    critic_rejection_rate: 0.142,
-    policy_pass_rate: 0.985
+    critic_rejection_rate: 0.32,
+    policy_pass_rate: 1.0
   },
   policy: {
     max_discount_percentage: 10.0,
@@ -269,24 +272,23 @@ export const useDashboardStore = create<DashboardStore>((set, get) => ({
     cannibalization_threshold: 0.40,
     active_channels: ["WHATSAPP", "EMAIL", "IN_APP_MODAL"]
   },
+  hourlyAnalytics: [],
+  actionDistribution: [],
+  qualityMetrics: null,
   isSimulating: false,
   filterRisk: 'ALL',
   searchQuery: '',
 
   setSelectedDecision: (decision) => set({ selectedDecision: decision }),
   
-  addDecision: (decision) => set((state) => ({
-    decisions: [decision, ...state.decisions],
-    selectedDecision: decision,
-    kpis: {
-      ...state.kpis,
-      total_sessions_analyzed: state.kpis.total_sessions_analyzed + 1,
-      high_risk_sessions: decision.risk_score >= 0.6 ? state.kpis.high_risk_sessions + 1 : state.kpis.high_risk_sessions,
-      interventions_executed: decision.execution_status === 'DISPATCHED' ? state.kpis.interventions_executed + 1 : state.kpis.interventions_executed,
-      recovered_cart_value: decision.execution_status === 'DISPATCHED' ? state.kpis.recovered_cart_value + decision.cart_value : state.kpis.recovered_cart_value,
-      net_incremental_margin: state.kpis.net_incremental_margin + decision.expected_incremental_margin
-    }
-  })),
+  addDecision: (decision) => {
+    set((state) => ({
+      decisions: [decision, ...state.decisions],
+      selectedDecision: decision,
+    }));
+    // Re-fetch all dynamic totals and aggregations from backend
+    get().fetchRemoteData();
+  },
 
   updatePolicy: async (updates) => {
     set((state) => ({ policy: { ...state.policy, ...updates } }));
@@ -302,18 +304,26 @@ export const useDashboardStore = create<DashboardStore>((set, get) => ({
 
   fetchRemoteData: async () => {
     try {
-      const [kpis, policy, decs] = await Promise.all([
+      const [kpis, policy, decs, hourly, actions, quality] = await Promise.all([
         api.getKPIs(),
         api.getPolicy(),
         api.getDecisions(),
+        api.getHourlyAnalytics(),
+        api.getActionDistribution(),
+        api.getQualityMetrics(),
       ]);
+      const currentSel = get().selectedDecision;
       set({
         kpis: { ...get().kpis, ...kpis },
         policy: { ...get().policy, ...policy },
         decisions: decs.decisions.length > 0 ? decs.decisions : get().decisions,
+        selectedDecision: currentSel || (decs.decisions.length > 0 ? decs.decisions[0] : null),
+        hourlyAnalytics: hourly.hourly || [],
+        actionDistribution: actions.distribution || [],
+        qualityMetrics: quality,
       });
     } catch (e) {
-      // Offline mode fallback keeps initial store state
+      console.warn('Offline mode or fetch error:', e);
     }
   },
 

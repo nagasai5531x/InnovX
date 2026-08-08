@@ -16,16 +16,24 @@ class ModelLoader:
         return cls._instance
 
     def _load_or_train_fallback(self):
-        try:
-            if os.path.exists(settings.XGB_MODEL_PATH):
-                logger.info("Loading XGBoost model from file", path=settings.XGB_MODEL_PATH)
-                self._xgb_model = xgb.Booster()
-                self._xgb_model.load_model(settings.XGB_MODEL_PATH)
-            else:
-                logger.warning("XGBoost model file not found. Creating cold-start operational model...")
-                self._xgb_model = self._create_coldstart_model()
-        except Exception as e:
-            logger.error("Error loading XGBoost model, initializing fallback predictor", error=str(e))
+        candidate_paths = [
+            "model.xgb",
+            "app/ml/model.xgb",
+            settings.XGB_MODEL_PATH
+        ]
+        loaded = False
+        for path in candidate_paths:
+            if os.path.exists(path):
+                try:
+                    self._xgb_model = xgb.Booster()
+                    self._xgb_model.load_model(path)
+                    print(f"[INFO] [ModelLoader] Loaded trained XGBoost model from: {path}")
+                    loaded = True
+                    break
+                except Exception as e:
+                    print(f"[WARNING] [ModelLoader] Failed loading model from {path}: {e}")
+        if not loaded:
+            print("[WARNING] [ModelLoader] Trained model file not found. Creating cold-start operational model...")
             self._xgb_model = self._create_coldstart_model()
 
     def _create_coldstart_model(self) -> xgb.Booster:
@@ -44,7 +52,8 @@ class ModelLoader:
         return booster
 
     def predict(self, feature_vector: np.ndarray) -> float:
-        dtest = xgb.DMatrix(feature_vector)
+        from app.ml.feature_pipeline import FeaturePipeline
+        dtest = xgb.DMatrix(feature_vector, feature_names=FeaturePipeline.FEATURE_NAMES)
         preds = self._xgb_model.predict(dtest)
         return float(preds[0])
 
